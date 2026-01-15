@@ -1,16 +1,40 @@
-# React + Vite
+# 🛍️ Basic E-Commerce Website
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern, responsive e-commerce website built with React.js and Tailwind CSS.
 
-Currently, two official plugins are available:
+## ✨ Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- ✅ Product Listing with images, names, and prices
+- ✅ Add to Cart functionality
+- ✅ Shopping Cart with quantity management
+- ✅ Wishlist feature
+- ✅ Product search and filtering
+- ✅ Payment notification (demo)
+- ✅ Responsive design for all devices
+- ✅ Toast notifications for user feedback
 
-## React Compiler
+## 🚀 Live Demo
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+[View Live Website](https://your-vercel-url.vercel.app)
 
-## Expanding the ESLint configuration
+## 📸 Screenshots
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+### Home Page
+![Home Page](./screenshots/home.png)
+
+### Products Page
+![Products Page](./screenshots/products.png)
+
+### Shopping Cart
+![Shopping Cart](./screenshots/cart.png)
+
+## 🛠️ Tech Stack
+
+- **Frontend:** React.js 18
+- **Styling:** Tailwind CSS
+- **Routing:** React Router DOM
+- **State Management:** React Context API
+- **Build Tool:** Vite
+- **Deployment:** Vercel
+
+## 📁 Project Structure
