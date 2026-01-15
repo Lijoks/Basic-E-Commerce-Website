@@ -1,31 +1,36 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Link } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
+import { useAuth } from '../context/AuthContext'; // Add this import
 
 const Header = () => {
   const { cart, wishlist } = useCart();
+  const { user, logout } = useAuth(); // Get user and logout from AuthContext
   const [searchTerm, setSearchTerm] = useState('');
   const navigate = useNavigate();
   
-
-const handleSearch = (e) => {
-  e.preventDefault();
-  if (searchTerm.trim()) {
-    // Get current path
-    const currentPath = window.location.pathname;
-    
-    if (currentPath === '/products') {
-      // If already on products page, refresh with search query
-      window.location.href = `/products?search=${encodeURIComponent(searchTerm.trim())}`;
-    } else {
-      // If on another page, navigate to products with search
-      navigate(`/products?search=${encodeURIComponent(searchTerm.trim())}`);
+  const handleSearch = (e) => {
+    e.preventDefault();
+    if (searchTerm.trim()) {
+      // Get current path
+      const currentPath = window.location.pathname;
+      
+      if (currentPath === '/products') {
+        // If already on products page, refresh with search query
+        window.location.href = `/products?search=${encodeURIComponent(searchTerm.trim())}`;
+      } else {
+        // If on another page, navigate to products with search
+        navigate(`/products?search=${encodeURIComponent(searchTerm.trim())}`);
+      }
+      
+      setSearchTerm('');
     }
-    
-    setSearchTerm('');
-  }
-};
+  };
+  
+  const handleLogout = () => {
+    logout();
+    navigate('/');
+  };
   
   const cartItemsCount = cart.reduce((sum, item) => sum + item.quantity, 0);
   const wishlistItemsCount = wishlist.length;
@@ -158,30 +163,81 @@ const handleSearch = (e) => {
               </div>
               <span className="hidden sm:inline">Wishlist</span>
             </Link>
-
             
-            {/* User Menu (Optional) */}
+            {/* User Menu - Updated with Auth */}
             <div className="relative group">
               <button className="flex items-center gap-2 text-gray-700 hover:text-blue-600 p-2 rounded-lg hover:bg-blue-50 transition-colors">
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                </svg>
-                <span className="hidden sm:inline">Account</span>
+                {user ? (
+                  <>
+                    <div className="w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-semibold">
+                      {user.name ? user.name.charAt(0).toUpperCase() : 'U'}
+                    </div>
+                    <span className="hidden sm:inline">
+                      {user.name ? user.name.split(' ')[0] : 'User'}
+                    </span>
+                  </>
+                ) : (
+                  <>
+                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                    </svg>
+                    <span className="hidden sm:inline">Account</span>
+                  </>
+                )}
               </button>
               
-              {/* Dropdown Menu */}
+              {/* Dropdown Menu - Updated with conditional rendering */}
               <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
                 <div className="py-2">
-                  <Link to="/profile" className="block px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600">
-                    Profile
-                  </Link>
-                  <Link to="/orders" className="block px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600">
-                    My Orders
-                  </Link>
-                  <div className="border-t my-1"></div>
-                  <button className="block w-full text-left px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600">
-                    Sign Out
-                  </button>
+                  {user ? (
+                    <>
+                      {/* User Info */}
+                      <div className="px-4 py-2 border-b">
+                        <p className="font-semibold truncate">{user.name || 'User'}</p>
+                        <p className="text-sm text-gray-500 truncate">
+                          {user.email || user.phone || 'No contact info'}
+                        </p>
+                      </div>
+                      
+                      {/* User Links */}
+                      <Link to="/profile" className="block px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 flex items-center gap-2">
+                        <span>👤</span> My Profile
+                      </Link>
+                      <Link to="/orders" className="block px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 flex items-center gap-2">
+                        <span>📦</span> My Orders
+                      </Link>
+                      <Link to="/wishlist" className="block px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 flex items-center gap-2">
+                        <span>❤️</span> My Wishlist
+                      </Link>
+                      
+                      <div className="border-t my-1"></div>
+                      
+                      {/* Logout */}
+                      <button 
+                        onClick={handleLogout}
+                        className="block w-full text-left px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 flex items-center gap-2"
+                      >
+                        <span>🚪</span> Sign Out
+                      </button>
+                    </>
+                  ) : (
+                    <>
+                      {/* Guest Links */}
+                      <Link to="/login" className="block px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 flex items-center gap-2">
+                        <span>🔑</span> Sign In
+                      </Link>
+                      <Link to="/signup" className="block px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 flex items-center gap-2">
+                        <span>✨</span> Create Account
+                      </Link>
+                      
+                      <div className="border-t my-1"></div>
+                      
+                      {/* Guest Options */}
+                      <Link to="/cart" className="block px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 flex items-center gap-2">
+                        <span>🛒</span> Guest Checkout
+                      </Link>
+                    </>
+                  )}
                 </div>
               </div>
             </div>
