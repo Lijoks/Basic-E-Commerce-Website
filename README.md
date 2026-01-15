@@ -15,7 +15,7 @@ A modern e-commerce website built with React.js and Tailwind CSS.
 - Vite
 
 ## Live Demo
-[Deployed on Vercel](https://your-url.vercel.app)
+[Deployed on Vercel](https://basic-e-commerce-website-snowy.vercel.app/)
 
 ## Getting Started
 ```bash
